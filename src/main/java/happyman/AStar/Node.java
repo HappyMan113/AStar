@@ -12,7 +12,7 @@ public final class Node<S>
     private Node<S> parent;
     private final Action<S> action;
 
-    Node(Problem<S> problem, Node<S> parent, Action<S> action)
+    private Node(Problem<S> problem, Node<S> parent, Action<S> action)
     {
         this.cost = parent.cost + action.cost;
         this.state = action.enact(parent.state);
@@ -30,7 +30,7 @@ public final class Node<S>
         this.action = null;
     }
 
-    public final List<Action<S>> getActions()
+    final List<Action<S>> getActions()
     {
         final List<Action<S>> actions = new LinkedList<>();
         for (Node<S> node = this; node != null && node.action != null; node = node.parent)
@@ -69,6 +69,12 @@ public final class Node<S>
             return other.state.equals(this.state);
         }
         return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return state.hashCode();
     }
 
     void getNeighbors(final Problem<S> problem, Consumer<Node<S>> consumer)
