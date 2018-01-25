@@ -20,13 +20,13 @@ public class SolutionFinder
                 return new Solution<>(best);
             }
             explored.add(best.state);
-            best.getNeighbors(problem, neighbor ->
+            for (Node<S> neighbor : best.getNeighbors(problem))
             {
                 if (!explored.contains(neighbor.state))
                 {
                     frontier.add(neighbor);
                 }
-            });
+            }
         } while (!frontier.isEmpty());
         return null;
     }

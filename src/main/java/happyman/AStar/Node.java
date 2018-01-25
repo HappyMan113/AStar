@@ -2,11 +2,10 @@ package happyman.AStar;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public final class Node<S>
 {
-    private final float cost;
+    private final float costSoFar;
     final S state;
     float estimatedOverallCost;
     private Node<S> parent;
@@ -14,16 +13,16 @@ public final class Node<S>
 
     private Node(Problem<S> problem, Node<S> parent, Action<S> action)
     {
-        this.cost = parent.cost + action.cost;
+        this.costSoFar = parent.costSoFar + action.cost;
         this.state = action.enact(parent.state);
-        this.estimatedOverallCost = this.cost + problem.getHeuristicCostToReachGoalFrom(this.state);
+        this.estimatedOverallCost = this.costSoFar + problem.getHeuristicCostToReachGoalFrom(this.state);
         this.parent = parent;
         this.action = action;
     }
 
     Node(Problem<S> problem)
     {
-        this.cost = 0;
+        this.costSoFar = 0;
         this.state = problem.initialState;
         this.estimatedOverallCost = problem.getHeuristicCostToReachGoalFrom(this.state);
         this.parent = null;
@@ -77,11 +76,13 @@ public final class Node<S>
         return state.hashCode();
     }
 
-    void getNeighbors(final Problem<S> problem, Consumer<Node<S>> consumer)
+    List<Node<S>> getNeighbors(final Problem<S> problem)
     {
+        List<Node<S>> neighbors = new LinkedList<>();
         for (Action<S> action : problem.getActions(state))
         {
-            consumer.accept(new Node<>(problem, this, action));
+            neighbors.add(new Node<>(problem, this, action));
         }
+        return neighbors;
     }
 }
