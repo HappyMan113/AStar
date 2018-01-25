@@ -1,5 +1,5 @@
 # IDAStar Version 2018.1.24
-An easy-to-use A* search implementation with iterative deepening for fast execution
+An fast, easy-to-use A* search implementation
 
 ===============================================================================
 
