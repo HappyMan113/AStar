@@ -1,6 +1,5 @@
 package happyman.AStar;
 
-import javax.xml.ws.Holder;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -9,52 +8,26 @@ public class SolutionFinder
 {
     public static<S> Solution<S> findSolution(final Problem<S> problem)
     {
-        float upperBound = 0;
-        final Holder<Float> lowestExceeder = new Holder<>();
-        while (true)
-        {
-            lowestExceeder.value = Float.MAX_VALUE;
-            Solution<S> solution = findSolution(problem, upperBound, lowestExceeder);
-            if (solution != null)
-            {
-                return solution;
-            }
-            upperBound = lowestExceeder.value;
-        }
-    }
-
-    private static<S> Solution<S> findSolution(final Problem<S> problem, final float upperBound, final Holder<Float> lowestExceeder)
-    {
-        final Set<S> closedSet = new HashSet<>();
-        final Set<Node<S>> openSet = new HashSet<>();
-
-        openSet.add(new Node<>(problem));
+        final Set<S> explored = new HashSet<>();
+        final Set<Node<S>> frontier = new HashSet<>();
+        frontier.add(new Node<>(problem));
 
         do
         {
-            final Node<S> best = popBest(openSet);
+            final Node<S> best = popBest(frontier);
             if (problem.isGoal(best.state))
             {
                 return new Solution<>(best);
             }
-
-            closedSet.add(best.state);
-
+            explored.add(best.state);
             best.getNeighbors(problem, neighbor ->
             {
-                if (!closedSet.contains(neighbor.state))
+                if (!explored.contains(neighbor.state))
                 {
-                    if (neighbor.estimatedOverallCost <= upperBound)
-                    {
-                        openSet.add(neighbor);
-                    }
-                    else if (neighbor.estimatedOverallCost < lowestExceeder.value)
-                    {
-                        lowestExceeder.value = neighbor.estimatedOverallCost;
-                    }
+                    frontier.add(neighbor);
                 }
             });
-        } while (!openSet.isEmpty());
+        } while (!frontier.isEmpty());
         return null;
     }
 
