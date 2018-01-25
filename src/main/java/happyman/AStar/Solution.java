@@ -14,7 +14,7 @@ public final class Solution<S>
     @Override
     public final String toString()
     {
-        return String.valueOf(solutionNode);
+        return solutionNode.toString();
     }
 
     public final List<Action<S>> getActions()

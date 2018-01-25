@@ -20,6 +20,6 @@ public abstract class Problem<S>
     @Override
     public String toString()
     {
-        return "\"Problem with an initial state of " + initialState + ".\"";
+        return "problem with an initial state of " + initialState + "";
     }
 }

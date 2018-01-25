@@ -33,13 +33,9 @@ public final class Node<S>
     public final List<Action<S>> getActions()
     {
         final List<Action<S>> actions = new LinkedList<>();
-        Node<S> node = this;
-        if (node.action != null)
+        for (Node<S> node = this; node != null && node.action != null; node = node.parent)
         {
-            for (; node != null; node = node.parent)
-            {
-                actions.add(0, node.action);
-            }
+            actions.add(0, node.action);
         }
         return actions;
     }
@@ -47,27 +43,20 @@ public final class Node<S>
     @Override
     public final String toString()
     {
-        if (action == null)
+        final List<Action<S>> actions = getActions();
+        if (actions.size() == 0)
         {
-            return "Do nothing";
+            return "solution: Do nothing (already in goal state " + state + ").";
         }
         else
         {
-            final List<Action<S>> actions = new LinkedList<>();
-            Node<S> root = this;
-            for (Node<S> node = this; node != null; node = node.parent)
+            final StringBuilder result = new StringBuilder().append(actions.size()).append("-step solution:").append('\n');
+            for (Action<S> action : actions)
             {
-                if (node.action != null)
-                {
-                    actions.add(0, node.action);
-                }
-                else
-                {
-                    root = node;
-                    break;
-                }
+                result.append(action).append('\n');
             }
-            return actions.size() + "-step solution: Starting at " + root.state + ", " + actions.toString() + " and arrive at " + state;
+            result.append("and arrive at ").append(state);
+            return result.toString();
         }
     }
 
