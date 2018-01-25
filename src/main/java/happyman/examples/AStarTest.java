@@ -4,12 +4,12 @@ import happyman.AStar.Action;
 import happyman.AStar.Problem;
 import happyman.AStar.Solution;
 import happyman.AStar.SolutionFinder;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 public class AStarTest
 {
@@ -24,7 +24,7 @@ public class AStarTest
             this.y = y;
         }
 
-        public Coord getRelative(int x, int y)
+        Coord getRelative(int x, int y)
         {
             return new Coord(this.x + x, this.y + y);
         }
@@ -38,7 +38,7 @@ public class AStarTest
 
     static class BoardState
     {
-        public static final int length = 3;
+        static final int length = 3;
         private final int[][] board;
 
         BoardState(int[][] ints)
@@ -180,7 +180,7 @@ public class AStarTest
 
     static class BoardProblem extends Problem<BoardState>
     {
-        protected BoardProblem(BoardState initialState)
+        BoardProblem(BoardState initialState)
         {
             super(initialState);
         }
@@ -223,7 +223,7 @@ public class AStarTest
     }
 
     @Test
-    void test()
+    public void test()
     {
         assertTrue(new BoardState(new int[][] {
                 new int[] {0, 1, 2},
@@ -256,7 +256,7 @@ public class AStarTest
         )));
     }
 
-    static<S> void analyzeSolution(Problem<S> problem)
+    static<S> void analyzeSolution(final Problem<S> problem)
     {
         final Solution<S> solution = SolutionFinder.findSolution(problem);
         int executionTime = 0;
