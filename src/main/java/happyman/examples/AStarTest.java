@@ -258,18 +258,31 @@ public class AStarTest
 
     static<S> void analyzeSolution(final Problem<S> problem)
     {
-        final Solution<S> solution = SolutionFinder.findSolution(problem);
+        analyzeSolution(problem, false);
+        analyzeSolution(problem, true);
+    }
+
+    private static <S> void analyzeSolution(Problem<S> problem, boolean limitedMemory)
+    {
+        final Solution<S> solution = SolutionFinder.findSolution(problem, limitedMemory);
         int executionTime = 0;
         int it = 0;
-        final long gStart = System.currentTimeMillis();
+        long gStart = System.currentTimeMillis();
         while (System.currentTimeMillis() - gStart < 1000)
         {
             long start = System.currentTimeMillis();
-            SolutionFinder.findSolution(problem);
+            SolutionFinder.findSolution(problem, limitedMemory);
             long stop = System.currentTimeMillis();
             executionTime += stop - start;
             it++;
         }
-        System.out.println(solution + " to " + problem + " took " + (float)executionTime/it + "ms to find\n");
+        if (limitedMemory)
+        {
+            System.out.println(solution + " to " + problem + " took " + (float)executionTime/it + "ms to find with iterative deepening A*\n");
+        }
+        else
+        {
+            System.out.println(solution + " to " + problem + " took " + (float)executionTime/it + "ms to find with good'le A*\n");
+        }
     }
 }
