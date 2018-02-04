@@ -15,9 +15,8 @@ public class SolutionFinder
                 findSolution(problem);
     }
 
-    private static<S> Solution<S> findSolution(final Problem<S> problem)
+    public static<S> Solution<S> findSolution(final Problem<S> problem)
     {
-
         final Set<S> explored = new HashSet<>();
         final PriorityQueue<Node<S>> frontier = new PriorityQueue<>();
         frontier.add(new Node<>(problem));
