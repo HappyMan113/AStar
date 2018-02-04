@@ -3,13 +3,14 @@ package happyman.AStar;
 import java.util.LinkedList;
 import java.util.List;
 
-public final class Node<S>
+public final class Node<S> implements Comparable<Node<S>>
 {
     private final float costSoFar;
-    final S state;
-    float estimatedOverallCost;
     private Node<S> parent;
     private final Action<S> action;
+
+    final S state;
+    final float estimatedOverallCost;
 
     private Node(Problem<S> problem, Node<S> parent, Action<S> action)
     {
@@ -76,13 +77,21 @@ public final class Node<S>
         return state.hashCode();
     }
 
-    List<Node<S>> getNeighbors(final Problem<S> problem)
+    Node<S>[] getNeighbors(final Problem<S> problem)
     {
-        List<Node<S>> neighbors = new LinkedList<>();
-        for (Action<S> action : problem.getActions(state))
+        List<Action<S>> actions = problem.getActions(state);
+        Node<S>[] neighbors = new Node[actions.size()];
+        int i = 0;
+        for (Action<S> action : actions)
         {
-            neighbors.add(new Node<>(problem, this, action));
+            neighbors[i++] = new Node<>(problem, this, action);
         }
         return neighbors;
+    }
+
+    @Override
+    public int compareTo(Node<S> o)
+    {
+        return estimatedOverallCost < o.estimatedOverallCost ? -1 : 1;
     }
 }
