@@ -82,7 +82,7 @@ public final class Node<S> implements Comparable<Node<S>>
         List<Action<S>> actions = problem.getActions(state);
         Node<S>[] neighbors = new Node[actions.size()];
         int i = 0;
-        for (Action<S> action : actions)
+        for (final Action<S> action : actions)
         {
             neighbors[i++] = new Node<>(problem, this, action);
         }

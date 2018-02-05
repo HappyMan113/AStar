@@ -97,6 +97,7 @@ public class SolutionFinder
         {
             return new Solution<>(node);
         }
+
         Node<S>[] neighbors = node.getNeighbors(problem);
         QuickSorter.quickSort(neighbors);
         for (final Node<S> neighbor : neighbors)
