@@ -12,7 +12,7 @@ public final class Node<S> implements Comparable<Node<S>>
     final S state;
     final float estimatedOverallCost;
 
-    private Node(Problem<S> problem, Node<S> parent, Action<S> action)
+    private Node(AStarProblem<S> problem, Node<S> parent, Action<S> action)
     {
         this.costSoFar = parent.costSoFar + action.cost;
         this.state = action.enact(parent.state);
@@ -21,7 +21,7 @@ public final class Node<S> implements Comparable<Node<S>>
         this.action = action;
     }
 
-    Node(Problem<S> problem)
+    Node(AStarProblem<S> problem)
     {
         this.costSoFar = 0;
         this.state = problem.initialState;
@@ -77,7 +77,7 @@ public final class Node<S> implements Comparable<Node<S>>
         return state.hashCode();
     }
 
-    Node<S>[] getNeighbors(final Problem<S> problem)
+    Node<S>[] getNeighbors(final AStarProblem<S> problem)
     {
         List<Action<S>> actions = problem.getActions(state);
         Node<S>[] neighbors = new Node[actions.size()];

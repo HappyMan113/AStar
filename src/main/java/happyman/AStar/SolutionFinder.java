@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class SolutionFinder
 {
-    public static<S> Solution<S> findSolution(final Problem<S> problem,
+    public static<S extends State> Solution<S> findSolution(final AStarProblem<S> problem,
                                               final boolean limitedMemory)
     {
         return limitedMemory ?
@@ -15,7 +15,7 @@ public class SolutionFinder
                 findSolution(problem);
     }
 
-    public static<S> Solution<S> findSolution(final Problem<S> problem)
+    public static<S extends State> Solution<S> findSolution(final AStarProblem<S> problem)
     {
         final Set<S> explored = new HashSet<>();
         final PriorityQueue<Node<S>> frontier = new PriorityQueue<>();
@@ -24,7 +24,7 @@ public class SolutionFinder
         do
         {
             final Node<S> best = frontier.remove();
-            if (problem.isGoal(best.state))
+            if (problem.isTerminal(best.state))
             {
                 return new Solution<>(best);
             }
@@ -40,7 +40,7 @@ public class SolutionFinder
         return null;
     }
 
-    private static<S> Solution<S> findSolutionWithLimitedMemory(final Problem<S> problem)
+    private static<S> Solution<S> findSolutionWithLimitedMemory(final AStarProblem<S> problem)
     {
         float estimatedCostLimit = 0;
         while(true)
@@ -88,12 +88,12 @@ public class SolutionFinder
 //        return null;
 //    }
 
-    private static<S> Solution<S> findSolutionWithLimitedMemory(final Problem<S> problem,
+    private static<S> Solution<S> findSolutionWithLimitedMemory(final AStarProblem<S> problem,
                                                                 final Node<S> node,
                                                                 final float estimatedCostLimit,
                                                                 final Holder<Float> smallestExceeder)
     {
-        if (problem.isGoal(node.state))
+        if (problem.isTerminal(node.state))
         {
             return new Solution<>(node);
         }

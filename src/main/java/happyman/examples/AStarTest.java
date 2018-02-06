@@ -1,9 +1,6 @@
 package happyman.examples;
 
-import happyman.AStar.Action;
-import happyman.AStar.Problem;
-import happyman.AStar.Solution;
-import happyman.AStar.SolutionFinder;
+import happyman.AStar.*;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -36,7 +33,7 @@ public class AStarTest
         }
     }
 
-    static class BoardState
+    static class BoardState extends State
     {
         static final int length = 3;
         private final int[][] board;
@@ -119,6 +116,20 @@ public class AStarTest
         }
 
         @Override
+        public int hashCode()
+        {
+            int code = 0;
+            for (int y = 0; y < length; y++)
+            {
+                for (int x = 0; x < length; x++)
+                {
+                    code = 31 * code + board[y][x];
+                }
+            }
+            return code;
+        }
+
+        @Override
         public boolean equals(Object o)
         {
             if (o instanceof BoardState)
@@ -138,20 +149,6 @@ public class AStarTest
             }
             return false;
         }
-
-        @Override
-        public int hashCode()
-        {
-            int code = 0;
-            for (int y = 0; y < length; y++)
-            {
-                for (int x = 0; x < length; x++)
-                {
-                    code = 31 * code + board[y][x];
-                }
-            }
-            return code;
-        }
     }
 
     static class BoardAction extends Action<BoardState>
@@ -166,7 +163,7 @@ public class AStarTest
         }
 
         @Override
-        protected BoardState enact(BoardState state)
+        public BoardState enact(BoardState state)
         {
             return new BoardState(state, coord1, coord2);
         }
@@ -178,7 +175,7 @@ public class AStarTest
         }
     }
 
-    static class BoardProblem extends Problem<BoardState>
+    static class BoardProblem extends AStarProblem<BoardState>
     {
         BoardProblem(BoardState initialState)
         {
@@ -192,13 +189,13 @@ public class AStarTest
         }
 
         @Override
-        protected boolean isGoal(BoardState state)
+        public boolean isTerminal(BoardState state)
         {
             return state.getTilesOff() == 0;
         }
 
         @Override
-        protected List<Action<BoardState>> getActions(final BoardState state)
+        public List<Action<BoardState>> getActions(final BoardState state)
         {
             final List<Action<BoardState>> result = new LinkedList<>();
             Coord blankCoord = state.coordOfBlank();
@@ -256,13 +253,13 @@ public class AStarTest
         )));
     }
 
-    static<S> void analyzeSolution(final Problem<S> problem)
+    static<S extends State> void analyzeSolution(final AStarProblem<S> problem)
     {
         analyzeSolution(problem, false);
         analyzeSolution(problem, true);
     }
 
-    private static <S> void analyzeSolution(Problem<S> problem, boolean limitedMemory)
+    private static <S extends State> void analyzeSolution(AStarProblem<S> problem, boolean limitedMemory)
     {
         final Solution<S> solution = SolutionFinder.findSolution(problem, limitedMemory);
         int executionTime = 0;

@@ -9,7 +9,7 @@ public abstract class Action<S>
         this.cost = cost;
     }
 
-    protected abstract S enact(S state);
+    public abstract S enact(S state);
 
     @Override
     public String toString()
