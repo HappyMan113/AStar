@@ -1,8 +1,8 @@
-package happyman.MiniMax;
+package happyman.MiniMaxAlphaBeta;
 
 public class Planner
 {
-    public static<S extends State> Move<S> findBestPlan(MiniMaxProblem<S> problem)
+    public static<S> Move<S> findBestPlan(MiniMaxProblem<S> problem) //We will assume that max is going first
     {
         Move<S> best = null;
         int highest = Integer.MIN_VALUE;
@@ -18,15 +18,16 @@ public class Planner
         return best;
     }
 
-    private static<S extends State> int maxValue(MiniMaxProblem<S> problem,
-                                                 Move<S> lastMove,
-                                                 int lowerBound, int upperBound)
+    private static<S> int maxValue(MiniMaxProblem<S> problem,
+                                   Move<S> lastMove,
+                                   int lowerBound, int upperBound)
     {
-        if (lastMove.state.terminal)
+        int highest = problem.getUtility(lastMove.state, false);
+        if (highest > 0)
         {
-            return lastMove.state.utility;
+            return highest;
         }
-        int highest = Integer.MIN_VALUE;
+        highest = Integer.MIN_VALUE;
         for (Move<S> nextMove : problem.getMoves(lastMove.state))
         {
             highest = Math.max(highest, minValue(problem, nextMove, lowerBound, upperBound));
@@ -39,15 +40,16 @@ public class Planner
         return highest;
     }
 
-    private static<S extends State> int minValue(MiniMaxProblem<S> problem,
-                                                 Move<S> lastMove,
-                                                 int lowerBound, int upperBound)
+    private static<S> int minValue(MiniMaxProblem<S> problem,
+                                   Move<S> lastMove,
+                                   int lowerBound, int upperBound)
     {
-        if (lastMove.state.terminal)
+        int lowest = problem.getUtility(lastMove.state, true);
+        if (lowest > 0)
         {
-            return lastMove.state.utility;
+            return lowest;
         }
-        int lowest = Integer.MAX_VALUE;
+        lowest = Integer.MAX_VALUE;
         for (Move<S> nextMove : problem.getMoves(lastMove.state))
         {
             lowest = Math.min(lowest, maxValue(problem, nextMove, lowerBound, upperBound));

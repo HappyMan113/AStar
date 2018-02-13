@@ -1,4 +1,4 @@
-package happyman.MiniMax;
+package happyman.MiniMaxAlphaBeta;
 
 public class Move<S>
 {
@@ -7,5 +7,11 @@ public class Move<S>
     protected Move(S destination)
     {
         this.state = destination;
+    }
+
+    @Override
+    public String toString()
+    {
+        return state.toString();
     }
 }
